@@ -3,15 +3,20 @@
 
 
 def text_indentation(text):
-    """Function printing text with two blank lines after each of ?, : and ."""
-
-    # Checking if text is a string
-    if not isinstance(text, str):
+    """Prints a text with 2 new lines after each of these characters: ., ?, and :."""
+    
+    # Check if text is a string
+    if type(text) is not str:
         raise TypeError("text must be a string")
-
-    # Changing the text for signs
-    for char in ".:?":
-        text = text.replace(char, char + "\n\n")
-
-    # Printing the text
-    print("\n".join(line.strip() for line in text.split("\n")), end="")
+    
+    # Iterate through the text and print with proper newlines
+    i = 0
+    while i < len(text):
+        # Print the current character
+        print(text[i], end="")
+        
+        # If the character is one of '.', '?', or ':', add two new lines
+        if text[i] in ['.', '?', ':']:
+            print("\n")
+        
+        i += 1

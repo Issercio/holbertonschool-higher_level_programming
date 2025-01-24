@@ -7,48 +7,24 @@ Divide all elements of a matrix
 
 
 def matrix_divided(matrix, div):
-    """matrix must be a list of lists of integers/floats
-    Returns a new matrix
-    """
-    newmatrix = []
-    length = 0
-
-    # Divides all elements of a matrix
-    if isinstance(div, int) is False and isinstance(div, float) is False:
-        raise TypeError('div must be a number')
-    # Matrix must be a list of integers or floats, TypeError
-    if type(matrix) is not list:
-        raise TypeError('matrix must be a matrix (list of lists) '
-                        'of integers/floats')
-    if not isinstance(matrix[0], list):
-        raise TypeError('matrix must be a matrix (list of lists) '
-                        'of integers/floats')
-    if not isinstance(matrix, list):
-        raise TypeError('matrix must be a matrix (list of lists) '
-                        'of integers/floats')
-    # matix has to exist, can't be less or equal to 0
-    if len(matrix[0]) <= 0:
-        raise TypeError('matrix must be a matrix (list of lists) '
-                        'of integers/floats')
-    # 1.let's create new matrix with newrow
-    for row in matrix:
-        newrow = []
-        # matrix must be a list
-        if type(row) is not list:
-            raise TypeError('matrix must be a matrix (list of lists) '
-                            'of integers/floats')
-        # 2. row is empty
-        if length == 0:
-            length = len(row)
-        # Each row must be the same size, TypeError
-        elif len(row) is not length:
-            raise TypeError('Each row of the matrix must have the same size')
-        # 3. each item has to be an integer or float
-        for item in row:
-            if type(item) is not int and type(item) is not float:
-                raise TypeError('matrix must be a matrix (list of lists) '
-                                'of integers/floats')
-            newrow.append(round(item / div, 2))
-        # add content to the matrix
-        newmatrix.append(newrow)
-    return newmatrix
+    """Divides all elements of a matrix by div and rounds the result to 2 decimal places."""
+    
+    # Check if matrix is a list of lists
+    if type(matrix) is not list or not all(type(row) is list for row in matrix):
+        raise TypeError("matrix must be a matrix (list of lists) of integers/floats")
+    
+    # Check if each row in the matrix has the same size
+    row_size = len(matrix[0])
+    if not all(len(row) == row_size for row in matrix):
+        raise TypeError("Each row of the matrix must have the same size")
+    
+    # Check if div is a number (int or float)
+    if type(div) not in [int, float]:
+        raise TypeError("div must be a number")
+    
+    # Check if div is not zero
+    if div == 0:
+        raise ZeroDivisionError("division by zero")
+    
+    # Create a new matrix with elements divided by div, rounded to 2 decimal places
+    return [[round(element / div, 2) for element in row] for row in matrix]
