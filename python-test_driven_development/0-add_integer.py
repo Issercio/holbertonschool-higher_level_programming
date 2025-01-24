@@ -6,14 +6,14 @@ This module contains a function that adds two integers.
 
 def add_integer(a, b=98):
     """
-    Adds two integers or floats, casting them to integers if necessary.
+    Adds two integers.
 
     Args:
-        a: The first number (int or float).
-        b: The second number (int or float), default is 98.
+        a (int or float): The first number.
+        b (int or float, optional): The second number. Defaults to 98.
 
     Returns:
-        The addition of a and b as an integer.
+        int: The addition of a and b.
 
     Raises:
         TypeError: If a or b is not an integer or float.
