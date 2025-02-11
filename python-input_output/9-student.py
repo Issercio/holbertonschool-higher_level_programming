@@ -1,9 +1,11 @@
 #!/usr/bin/python3
+'''model_class_student
+'''
 
 
 class Student:
-    """ Student class with public instance attributes and method to retrieve a dictionary representation """
-    
+    """ Student class with public instance"""
+
     def __init__(self, first_name, last_name, age):
         """ Initialize the instance with first_name, last_name, and age """
         self.first_name = first_name
