@@ -16,14 +16,21 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             self.send_plain_text_response(200, "Hello, this is a simple API!")
 
         elif self.path == "/data":
-            data = {"name": "John", "age": 30, "city": "New York"}
+            data = {
+                "name": "John",
+                "age": 30,
+                "city": "New York"
+            }
             self.send_json_response(200, data)
 
         elif self.path == "/status":
             self.send_plain_text_response(200, "OK")
 
         elif self.path == "/info":
-            info = {"version": "1.0", "description": "A simple API built with http.server"}
+            info = {
+                "version": "1.0",
+                "description": "A simple API built with http.server"
+            }
             self.send_json_response(200, info)
 
         else:
@@ -45,7 +52,8 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         self.wfile.write(json.dumps(data).encode("utf-8"))
 
 
-def run(server_class=HTTPServer, handler_class=SimpleHTTPRequestHandler, port=8000):
+def run(server_class=HTTPServer, handler_class=SimpleHTTPRequestHandler,
+        port=8000):
     """Start the HTTP server on the specified port."""
     server_address = ("", port)
     httpd = server_class(server_address, handler_class)
