@@ -1,47 +1,30 @@
 #!/usr/bin/python3
+"""Script that takes argument and lists states"""
 import MySQLdb
 import sys
 
 if __name__ == "__main__":
-    # Ensure that the script is called with exactly 4 arguments
-    if len(sys.argv) != 5:
-        print(
-            "Usage: ./2-my_filter_states.py <mysql_user> <mysql_password> "
-            "<database_name> <state_name>"
-        )
-        sys.exit(1)
-
-    # Get arguments from the command line
-    mysql_user = sys.argv[1]
-    mysql_password = sys.argv[2]
-    database_name = sys.argv[3]
-    state_name = sys.argv[4]
-
-    # Connect to the MySQL database
+    # Connect to MySQL with command line arguments
     db = MySQLdb.connect(
         host="localhost",
         port=3306,
-        user=mysql_user,
-        passwd=mysql_password,
-        db=database_name
+        user=sys.argv[1],
+        passwd=sys.argv[2],
+        db=sys.argv[3]
     )
 
-    # Create a cursor object to interact with the database
+    # Create cursor to execute queries
     cursor = db.cursor()
 
-    # Create the SQL query with the argument passed using parameterized query
-    query = "SELECT * FROM states WHERE name = %s ORDER BY id ASC"
+    # Execute query with format (as required)
+    query = "SELECT * FROM states WHERE name = '{}' ORDER BY id ASC"
+    cursor.execute(query.format(sys.argv[4]))
 
-    # Execute the query with the state_name parameter
-    cursor.execute(query, (state_name,))
+    # Fetch and print results
+    states = cursor.fetchall()
+    for state in states:
+        print(state)
 
-    # Fetch all rows and display them
-    results = cursor.fetchall()
-
-    # If no results are found, nothing is printed
-    for row in results:
-        print(row)
-
-    # Close the cursor and the database connection
+    # Close cursor and database
     cursor.close()
     db.close()
