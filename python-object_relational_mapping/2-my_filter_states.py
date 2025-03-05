@@ -4,27 +4,30 @@ import MySQLdb
 import sys
 
 if __name__ == "__main__":
-    # Connect to MySQL with command line arguments
-    db = MySQLdb.connect(
-        host="localhost",
-        port=3306,
-        user=sys.argv[1],
-        passwd=sys.argv[2],
-        db=sys.argv[3]
-    )
+    # Get arguments
+    mysql_user = sys.argv[1]
+    mysql_password = sys.argv[2]
+    database_name = sys.argv[3]
+    state_name = sys.argv[4]
 
-    # Create cursor to execute queries
+    # Connect to the MySQL database
+    db = MySQLdb.connect(host="localhost", port=3306, user=mysql_user, passwd=mysql_password, db=database_name)
+    
+    # Create a cursor object to interact with the database
     cursor = db.cursor()
 
-    # Execute query with format (as required)
-    query = "SELECT * FROM states WHERE name = '{}' ORDER BY id ASC"
-    cursor.execute(query.format(sys.argv[4]))
+    # Create the SQL query with the argument passed using format
+    query = "SELECT * FROM states WHERE name = %s ORDER BY id ASC"
+    
+    # Execute the query
+    cursor.execute(query, (state_name,))
+    
+    # Fetch all rows and display them
+    results = cursor.fetchall()
+    
+    for row in results:
+        print(row)
 
-    # Fetch and print results
-    states = cursor.fetchall()
-    for state in states:
-        print(state)
-
-    # Close cursor and database
+    # Close the cursor and the database connection
     cursor.close()
     db.close()
