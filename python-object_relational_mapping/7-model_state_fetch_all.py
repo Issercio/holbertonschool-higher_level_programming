@@ -12,8 +12,11 @@ from sqlalchemy.orm import sessionmaker
 
 if __name__ == "__main__":
     # Create connection to database
-    engine = create_engine('mysql+mysqldb://{}:{}@localhost:3306/{}'
-                         .format(sys.argv[1], sys.argv[2], sys.argv[3]))
+    engine = create_engine(
+        'mysql+mysqldb://{}:{}@localhost:3306/{}'.format(
+            sys.argv[1], sys.argv[2], sys.argv[3]
+        )
+    )
 
     # Create session factory
     Session = sessionmaker(bind=engine)

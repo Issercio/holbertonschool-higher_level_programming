@@ -11,20 +11,26 @@ if __name__ == "__main__":
     state_name = sys.argv[4]
 
     # Connect to the MySQL database
-    db = MySQLdb.connect(host="localhost", port=3306, user=mysql_user, passwd=mysql_password, db=database_name)
-    
+    db = MySQLdb.connect(
+        host="localhost",
+        port=3306,
+        user=mysql_user,
+        passwd=mysql_password,
+        db=database_name
+    )
+
     # Create a cursor object to interact with the database
     cursor = db.cursor()
 
     # Create the SQL query with the argument passed using format
     query = "SELECT * FROM states WHERE name = %s ORDER BY id ASC"
-    
+
     # Execute the query
     cursor.execute(query, (state_name,))
-    
+
     # Fetch all rows and display them
     results = cursor.fetchall()
-    
+
     for row in results:
         print(row)
 
