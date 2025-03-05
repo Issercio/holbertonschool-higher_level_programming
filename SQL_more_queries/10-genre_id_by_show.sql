@@ -1,0 +1,1 @@
+-- Script that lists shows with at least one genre linked

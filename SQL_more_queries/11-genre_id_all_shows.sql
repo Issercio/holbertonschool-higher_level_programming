@@ -1,0 +1,1 @@
+-- Script that lists all shows with their genre IDs (including shows without genres)

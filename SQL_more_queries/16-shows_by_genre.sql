@@ -1,0 +1,1 @@
+-- Script that lists all shows and their linked genres

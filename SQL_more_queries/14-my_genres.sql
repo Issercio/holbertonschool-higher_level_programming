@@ -1,0 +1,1 @@
+-- Script that lists all genres of the show Dexter

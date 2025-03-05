@@ -1,0 +1,1 @@
+-- Script that lists all shows that have no genres linked
