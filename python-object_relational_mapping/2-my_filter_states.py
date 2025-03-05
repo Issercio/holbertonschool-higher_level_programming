@@ -1,10 +1,9 @@
 #!/usr/bin/python3
-"""Script that takes argument and lists states"""
 import MySQLdb
 import sys
 
 if __name__ == "__main__":
-    # Get arguments
+    # Get arguments from the command line
     mysql_user = sys.argv[1]
     mysql_password = sys.argv[2]
     database_name = sys.argv[3]
@@ -22,8 +21,8 @@ if __name__ == "__main__":
     # Create a cursor object to interact with the database
     cursor = db.cursor()
 
-    # Create the SQL query with the argument passed using format
-    query = "SELECT * FROM states WHERE name = %s ORDER BY id ASC"
+    # Create the SQL query with the argument passed using parameterized query
+    query = "SELECT * FROM states WHERE LOWER(name) = LOWER(%s) ORDER BY id ASC"
 
     # Execute the query
     cursor.execute(query, (state_name,))
@@ -31,8 +30,12 @@ if __name__ == "__main__":
     # Fetch all rows and display them
     results = cursor.fetchall()
 
-    for row in results:
-        print(row)
+    # Check if results are empty and print accordingly
+    if results:
+        for row in results:
+            print(row)
+    else:
+        print("No matching states found.")
 
     # Close the cursor and the database connection
     cursor.close()
