@@ -3,6 +3,14 @@ import MySQLdb
 import sys
 
 if __name__ == "__main__":
+    # Ensure that the script is called with exactly 4 arguments
+    if len(sys.argv) != 5:
+        print(
+            "Usage: ./2-my_filter_states.py <mysql_user> <mysql_password> "
+            "<database_name> <state_name>"
+        )
+        sys.exit(1)
+
     # Get arguments from the command line
     mysql_user = sys.argv[1]
     mysql_password = sys.argv[2]
@@ -22,20 +30,17 @@ if __name__ == "__main__":
     cursor = db.cursor()
 
     # Create the SQL query with the argument passed using parameterized query
-    query = "SELECT * FROM states WHERE LOWER(name) = LOWER(%s) ORDER BY id ASC"
+    query = "SELECT * FROM states WHERE name = %s ORDER BY id ASC"
 
-    # Execute the query
+    # Execute the query with the state_name parameter
     cursor.execute(query, (state_name,))
 
     # Fetch all rows and display them
     results = cursor.fetchall()
 
-    # Check if results are empty and print accordingly
-    if results:
-        for row in results:
-            print(row)
-    else:
-        print("No matching states found.")
+    # If no results are found, nothing is printed
+    for row in results:
+        print(row)
 
     # Close the cursor and the database connection
     cursor.close()
