@@ -1,12 +1,12 @@
 #!/usr/bin/python3
-"""Module defining State class"""
+"""Contains State class and Base"""
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
 
 class State(Base):
-    """State class inheriting from Base"""
+    """Class representing states table"""
     __tablename__ = 'states'
     
     id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
