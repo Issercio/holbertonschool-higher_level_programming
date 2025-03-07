@@ -1,10 +1,11 @@
 #!/usr/bin/python3
-"""Script that takes argument and lists states"""
+"""Script that displays values in states table matching argument"""
+
 import MySQLdb
 import sys
 
 if __name__ == "__main__":
-    # Connect to MySQL with command line arguments
+    # Connect to MySQL server
     db = MySQLdb.connect(
         host="localhost",
         port=3306,
@@ -13,18 +14,22 @@ if __name__ == "__main__":
         db=sys.argv[3]
     )
 
-    # Create cursor to execute queries
+    # Create cursor object
     cursor = db.cursor()
 
-    # Execute query with format (as required)
-    query = "SELECT * FROM states WHERE name = '{}' ORDER BY id ASC"
-    cursor.execute(query.format(sys.argv[4]))
+    # Execute query with user input
+    query = """SELECT * FROM states
+               WHERE BINARY name = '{}'
+               ORDER BY id ASC""".format(sys.argv[4])
+    cursor.execute(query)
 
-    # Fetch and print results
-    states = cursor.fetchall()
-    for state in states:
-        print(state)
+    # Fetch all rows
+    rows = cursor.fetchall()
 
-    # Close cursor and database
+    # Print results
+    for row in rows:
+        print(row)
+
+    # Close cursor and connection
     cursor.close()
     db.close()
