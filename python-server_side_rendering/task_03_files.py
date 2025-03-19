@@ -1,44 +1,65 @@
-from flask import Flask, render_template, request, json, jsonify
+from flask import Flask, render_template, request
+import json
 import csv
 
 app = Flask(__name__)
 
-# Function to read data from JSON file
-def read_json():
+# 📌 Fonction pour lire le fichier JSON
+def read_json_file():
     try:
         with open("products.json", "r") as file:
             return json.load(file)
     except Exception as e:
-        return []
+        return {"error": f"Erreur de lecture JSON: {str(e)}"}
 
-# Function to read data from CSV file
-def read_csv():
+# 📌 Fonction pour lire le fichier CSV
+def read_csv_file():
     try:
+        products = []
         with open("products.csv", "r") as file:
             csv_reader = csv.DictReader(file)
-            return [{"id": int(row["id"]), "name": row["name"], "category": row["category"], "price": float(row["price"])} for row in csv_reader]
+            for row in csv_reader:
+                products.append({
+                    "id": int(row["id"]),
+                    "name": row["name"],
+                    "category": row["category"],
+                    "price": float(row["price"])
+                })
+        return products
     except Exception as e:
-        return []
+        return {"error": f"Erreur de lecture CSV: {str(e)}"}
 
+# 📌 Route principale
 @app.route("/products")
-def products():
-    source = request.args.get("source")
-    product_id = request.args.get("id", type=int)
+def show_products():
+    source = request.args.get("source")  # Récupérer ?source=json ou ?source=csv
+    product_id = request.args.get("id")  # Récupérer ?id=1
 
+    # Sélectionner la source des données
     if source == "json":
-        data = read_json()
+        products = read_json_file()
     elif source == "csv":
-        data = read_csv()
+        products = read_csv_file()
     else:
-        return render_template("product_display.html", error="Wrong source. Use 'json' or 'csv'.")
+        return render_template("product_display.html", error="⚠️ Mauvaise source ! Utilisez ?source=json ou ?source=csv.")
 
-    # If ID is provided, filter the data
+    # Vérifier si les données sont valides
+    if isinstance(products, dict) and "error" in products:
+        return render_template("product_display.html", error=products["error"])
+
+    # Si un ID est fourni, filtrer les résultats
     if product_id:
-        data = [item for item in data if item["id"] == product_id]
-        if not data:
-            return render_template("product_display.html", error=f"Product with ID {product_id} not found.")
+        try:
+            product_id = int(product_id)
+            filtered_products = [p for p in products if p["id"] == product_id]
+            if not filtered_products:
+                return render_template("product_display.html", error="❌ Produit non trouvé.")
+            products = filtered_products
+        except ValueError:
+            return render_template("product_display.html", error="⚠️ ID invalide !")
 
-    return render_template("product_display.html", products=data)
+    return render_template("product_display.html", products=products)
 
+# Lancer l'application Flask
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
