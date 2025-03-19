@@ -3,6 +3,8 @@ import sqlite3
 def create_database():
     conn = sqlite3.connect('products.db')
     cursor = conn.cursor()
+    
+    # Create table
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS Products (
             id INTEGER PRIMARY KEY,
@@ -12,10 +14,10 @@ def create_database():
         )
     ''')
     
-    # Clear existing data if any
+    # Clear existing data
     cursor.execute('DELETE FROM Products')
     
-    # Insert the required sample data
+    # Insert sample data
     cursor.execute('''
         INSERT INTO Products (id, name, category, price)
         VALUES
